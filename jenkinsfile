@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/RobertoRivasL/mi-proyecto.git'
+            }
+        }
+        stage('Build & Test') {
+            steps {
+                sh 'mvn clean test'
+            }
+        }
+    }
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+        }
+        success {
+            echo 'Build and tests succeeded!'
+        }
+        failure {
+            echo 'Build or tests failed!'
+        }
+    }
+}
